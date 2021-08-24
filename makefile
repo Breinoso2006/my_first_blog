@@ -1,7 +1,6 @@
 .PHONY: help
 
 MANAGE = python manage.py
-APP = blog
 
 help:  ## This help 
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort
@@ -19,7 +18,7 @@ clean:  ## Clean python bytecodes, optimized files, logs, cache, coverage...
 	@echo 'Temporary files deleted'
 
 shell: clean  ## Run a django shell
-	@$(MANAGE) shell
+	@$(MANAGE) shell_plus
 
 requirements-pip:  ## Install the APP requirements
 	@pip install --upgrade pip
@@ -30,10 +29,10 @@ run-server: ## Run the server in a virtualenv
 	@$(MANAGE) runserver
 
 migrations:  ## Create migrations
-	@$(MANAGE) makemigrations $(APP)
+	@$(MANAGE) makemigrations $(app)
 
 migrate: ##  Execute the migrations
-	@$(MANAGE) migrate blog $(APP)
+	@$(MANAGE) migrate blog $(app)
 
 createsuperuser:  ## Create the django admin superuser
 	@$(MANAGE) createsuperuser
@@ -46,3 +45,6 @@ docker-compose-stop: clean  ## Stop docker-compose for development environment
 
 docker-compose-rm: docker-compose-stop ## Delete the development environment containers
 	@docker-compose rm -f
+
+show-urls: clean  ## Show all urls available on the app
+	$(MANAGE) show_urls
