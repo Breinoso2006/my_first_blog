@@ -25,7 +25,7 @@ requirements-pip:  ## Install the APP requirements
 	@pip install -r requirements/base.txt
 	@pip install -r requirements/development.txt
 
-run-server: ## Run the server in a virtualenv
+run-server: ## Run the server
 	@$(MANAGE) runserver
 
 migrations:  ## Create migrations
