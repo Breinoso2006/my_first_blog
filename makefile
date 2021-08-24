@@ -37,14 +37,14 @@ migrate: ##  Execute the migrations
 createsuperuser:  ## Create the django admin superuser
 	@$(MANAGE) createsuperuser
 
-docker-compose-up: clean  ## Raise docker-compose for development environment
-	@docker-compose up -d
+# docker-compose-up: clean  ## Raise docker-compose for development environment
+# 	@docker-compose up -d
 
-docker-compose-stop: clean  ## Stop docker-compose for development environment
-	@docker-compose stop
+# docker-compose-stop: clean  ## Stop docker-compose for development environment
+# 	@docker-compose stop
 
-docker-compose-rm: docker-compose-stop ## Delete the development environment containers
-	@docker-compose rm -f
+# docker-compose-rm: docker-compose-stop ## Delete the development environment containers
+# 	@docker-compose rm -f
 
 show-urls: clean  ## Show all urls available on the app
 	$(MANAGE) show_urls
