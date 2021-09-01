@@ -1,6 +1,9 @@
 .PHONY: help
 
 MANAGE = python manage.py
+USER_ID = $(shell id -u)
+GROUP_ID = $(shell id -g)
+SHARED_FOLDER=/tmp/shared-docker-$(shell date +%Y%m%d_%H%M%S)
 
 help:  ## This help 
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort
@@ -25,7 +28,7 @@ requirements-pip:  ## Install the APP requirements
 	@pip install -r requirements/base.txt
 	@pip install -r requirements/development.txt
 
-run-server: ## Run the server
+run-server: clean migrate  ## Run the server
 	@$(MANAGE) runserver
 
 migrations:  ## Create migrations
@@ -38,13 +41,23 @@ createsuperuser:  ## Create the django admin superuser
 	@$(MANAGE) createsuperuser
 
 docker-compose-up: clean  ## Raise docker-compose for development environment
-	@docker-compose up
+	@docker-compose up -d
 
 docker-compose-stop: clean  ## Stop docker-compose for development environment
 	@docker-compose stop
 
 docker-compose-rm: docker-compose-stop ## Delete the development environment containers
 	@docker-compose rm -f
+
+docker-build-image: ## Build application image
+	@echo 'Building application image'
+	@docker build -t djangogirls:1.0 --pull --no-cache --build-arg UID=$(USER_ID) --build-arg GID=$(GROUP_ID) --build-arg APP_PORT=8080 --network host .z
+
+docker-run-local: clean  ## Run the docker application image locally
+	@echo "You can exchange files with these containers on the directory $(SHARED_FOLDER) on the host and /shared on the container."
+	@mkdir -p $(SHARED_FOLDER)
+	@echo 'Starting app container...'
+	@docker run --rm -d --env-file .env --network host --mount type=bind,source=$(SHARED_FOLDER),target=/shared --name 'djangogirls' djangogirls:1.0 'make run-server' &
 
 show-urls: clean  ## Show all urls available on the app
 	@$(MANAGE) show_urls
