@@ -51,7 +51,7 @@ docker-compose-rm: docker-compose-stop ## Delete the development environment con
 
 docker-build-image: ## Build application image
 	@echo 'Building application image'
-	@docker build -t djangogirls:1.0 --pull --no-cache --build-arg UID=$(USER_ID) --build-arg GID=$(GROUP_ID) --build-arg APP_PORT=8080 --network host .z
+	@docker build -t djangogirls:1.0 --pull --no-cache --build-arg UID=$(USER_ID) --build-arg GID=$(GROUP_ID) --build-arg APP_PORT=8080 --network host .
 
 docker-run-local: clean  ## Run the docker application image locally
 	@echo "You can exchange files with these containers on the directory $(SHARED_FOLDER) on the host and /shared on the container."

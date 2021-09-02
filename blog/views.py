@@ -56,3 +56,7 @@ def post_edit(request, pk):
 def about(request):
     '''Acesso a página About'''
     return render(request, 'blog/about.html', {})
+
+def admin(request):
+    '''Acesso a página Admin'''
+    return render(request, 'admin/', {})
