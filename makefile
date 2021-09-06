@@ -4,7 +4,7 @@ MANAGE = python manage.py
 USER_ID = $(shell id -u)
 GROUP_ID = $(shell id -g)
 SHARED_FOLDER=/tmp/shared-docker-$(shell date +%Y%m%d_%H%M%S)
-VERSION = {}
+VERSION = 1.0.0
 
 help:  ## This help 
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort
