@@ -4,6 +4,7 @@ MANAGE = python manage.py
 USER_ID = $(shell id -u)
 GROUP_ID = $(shell id -g)
 SHARED_FOLDER=/tmp/shared-docker-$(shell date +%Y%m%d_%H%M%S)
+VERSION = {}
 
 help:  ## This help 
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST) | sort
@@ -51,13 +52,22 @@ docker-compose-rm: docker-compose-stop ## Delete the development environment con
 
 docker-build-image: ## Build application image
 	@echo 'Building application image'
-	@docker build -t djangogirls:1.0 --pull --no-cache --build-arg UID=$(USER_ID) --build-arg GID=$(GROUP_ID) --build-arg APP_PORT=8080 --network host .
+	@docker build -t djangogirls:${VERSION}--pull --no-cache --build-arg UID=$(USER_ID) --build-arg GID=$(GROUP_ID) --build-arg APP_PORT=8080 --network host .
 
 docker-run-local: clean  ## Run the docker application image locally
 	@echo "You can exchange files with these containers on the directory $(SHARED_FOLDER) on the host and /shared on the container."
 	@mkdir -p $(SHARED_FOLDER)
 	@echo 'Starting app container...'
-	@docker run --rm -d --env-file .env --network host --mount type=bind,source=$(SHARED_FOLDER),target=/shared --name 'djangogirls' djangogirls:1.0 'make run-server' &
+	@docker run --rm -d --env-file .env --network host --mount type=bind,source=$(SHARED_FOLDER),target=/shared --name 'djangogirls' djangogirls:${VERSION}'make run-server' &
 
 show-urls: clean  ## Show all urls available on the app
 	@$(MANAGE) show_urls
+
+release-patch:  ## Update package release as patch
+	@bump2version patch
+
+release-minor:  ## Update package release as minor
+	@bump2version minor
+
+release-major:  ## Update package release as major
+	@bump2version major
