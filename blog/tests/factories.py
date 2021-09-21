@@ -1,7 +1,7 @@
 import factory
+
+from django.utils import timezone
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
-import datetime
 
 from blog.models import Post
 
@@ -18,7 +18,7 @@ class PostFactory(factory.django.DjangoModelFactory):
     author = factory.SubFactory(UserFactory)
     title = 'Testando o factoryboy'
     text = 'parece que funcionou'
-    created_date = datetime.date.today()
-    published_date = datetime.date.today()
+    created_date = timezone.now()
+    published_date = timezone.now()
 
 

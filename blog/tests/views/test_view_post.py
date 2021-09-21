@@ -1,20 +1,18 @@
-#export DJANGO_SETTINGS_MODULE=mysite.settings no terminal
-#py.test blog --ds=mysite.settings -s  -vvv
+#export DJANGO_SETTINGS_MODULE=mysite.settings --> no terminal caso necessário
+#py.test blog --ds=mysite.settings -s  -vvv --> no terminal para rodar pytest
+#import ipdb; ipdb.set_trace(); --> no código para testar partes
 
-import datetime
 import factory
 import pytest
 
 from django.urls import reverse_lazy
+from django.utils import timezone
+
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from blog.models import Post
 from blog.tests.factories import PostFactory, UserFactory
-from blog import urls
-
-#from django.contrib.auth.models import User
-
+from blog.models import Post
 
 @pytest.mark.django_db
 class TestPostViewSet:
@@ -22,9 +20,9 @@ class TestPostViewSet:
         self.client = APIClient()
         self.list_url = reverse_lazy('blog:post_list')
 
-        posts = [('bru1', 'teste1','texto1',datetime.date.today(),datetime.date.today()), 
-                ('bru2', 'teste2','texto2',datetime.date.today(),datetime.date.today()),
-                ('bru3', 'teste3','texto3',datetime.date.today(),datetime.date.today())]
+        posts = [('bru1', 'title1','text1',timezone.now(),timezone.now()), 
+                ('bru2', 'title2','text2',timezone.now(),timezone.now()),
+                ('bru3', 'title3','text3',timezone.now(),timezone.now())]
 
         sequence = factory.Sequence(lambda n : n + 1)
 
@@ -45,6 +43,21 @@ class TestPostViewSet:
 
     def test_get_posts(self):
         response = self.client.get(self.list_url)
-        #import ipdb; ipdb.set_trace();
+
         assert response.content.decode('utf-8').count('/post/') == Post.objects.count()
         assert response.status_code == status.HTTP_200_OK
+
+    def test_unique_titles(self):
+        response = self.client.get(self.list_url)
+
+        assert response.content.decode('utf-8').count('title1') == 1
+        assert response.content.decode('utf-8').count('title2') == 1 
+        assert response.content.decode('utf-8').count('title3') == 1 
+
+    def test_unique_texts(self):
+        response = self.client.get(self.list_url)
+
+        assert response.content.decode('utf-8').count('text1') == 1 
+        assert response.content.decode('utf-8').count('text2') == 1 
+        assert response.content.decode('utf-8').count('text3') == 1 
+
