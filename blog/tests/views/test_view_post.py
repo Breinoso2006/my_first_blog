@@ -1,7 +1,3 @@
-#export DJANGO_SETTINGS_MODULE=mysite.settings --> no terminal caso necessário
-#py.test blog --ds=mysite.settings -s  -vvv --> no terminal para rodar pytest
-#import ipdb; ipdb.set_trace(); --> no código para testar partes
-
 import factory
 import pytest
 
@@ -19,10 +15,10 @@ class TestPostViewSet:
     def setup(self):
         self.client = APIClient()
         self.list_url = reverse_lazy('blog:post_list')
-
-        posts = [('bru1', 'title1','text1',timezone.now(),timezone.now()), 
-                ('bru2', 'title2','text2',timezone.now(),timezone.now()),
-                ('bru3', 'title3','text3',timezone.now(),timezone.now())]
+        now = timezone.now()
+        posts = [('bru1', 'title1','text1',now,now), 
+                ('bru2', 'title2','text2',now,now),
+                ('bru3', 'title3','text3',now,now)]
 
         sequence = factory.Sequence(lambda n : n + 1)
 
