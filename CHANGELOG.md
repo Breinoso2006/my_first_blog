@@ -1,6 +1,6 @@
 # Djangogirls Changelog
 
-### [Unreleased] 
+### [Unreleased] ### [1.1.1] - 2021/09/22 
 
 ### [1.1.0] - 2021/09/06 
 
