@@ -71,3 +71,12 @@ release-minor:  ## Update package release as minor
 
 release-major:  ## Update package release as major
 	@bump2version major
+
+lint: clean  ## Run pylint linter
+	@printf '\n --- \n >>> Running linter...<<<\n'
+	@pylint --rcfile=.pylintrc  --django-settings-module=mysite.settings mysite/*
+	@printf '\n FINISHED! \n --- \n'
+
+style:  ## Run isort and black auto formatting code style in the project
+	@isort -m 3 --tc .
+	@black -S -t py37 -l 79 mysite/. blog/. --exclude '/(\.git|\.venv|env|venv|build|dist)/'
