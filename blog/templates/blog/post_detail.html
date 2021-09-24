@@ -6,7 +6,7 @@
             <a style = 'float:right' class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
         {% endif %}
         {% if post.published_date %}
-            <div class="date" align = 'left'>
+            <div class="date">
                 {{ post.published_date }}
             </div>
         {% endif %}
