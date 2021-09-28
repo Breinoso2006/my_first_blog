@@ -8,6 +8,8 @@ from rest_framework.test import APIClient
 from blog.models import Post
 from blog.tests.factories import PostFactory, UserFactory
 
+def search_word(var,word):
+    return var.content.decode('utf-8').count(word)
 
 @pytest.mark.django_db
 class TestPostViewSet:
@@ -39,7 +41,7 @@ class TestPostViewSet:
         response = self.client.get(self.list_url)
 
         assert (
-            response.content.decode('utf-8').count('/post/')
+            search_word(response,'/post/')
             == Post.objects.count()
         )
         assert response.status_code == status.HTTP_200_OK
@@ -47,13 +49,13 @@ class TestPostViewSet:
     def test_unique_titles(self):
         response = self.client.get(self.list_url)
 
-        assert response.content.decode('utf-8').count('title1') == 1
-        assert response.content.decode('utf-8').count('title2') == 1
-        assert response.content.decode('utf-8').count('title3') == 1
+        assert search_word(response,'title1') == 1
+        assert search_word(response,'title2') == 1
+        assert search_word(response,'title3') == 1
 
     def test_unique_texts(self):
         response = self.client.get(self.list_url)
 
-        assert response.content.decode('utf-8').count('text1') == 1
-        assert response.content.decode('utf-8').count('text2') == 1
-        assert response.content.decode('utf-8').count('text3') == 1
+        assert search_word(response,'text1') == 1
+        assert search_word(response,'text2') == 1
+        assert search_word(response,'text3') == 1
