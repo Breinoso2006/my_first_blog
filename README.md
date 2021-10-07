@@ -64,7 +64,7 @@ With instructions created, it's time to apply them (execute within database):
 After this command below, you can already go to 127.0.0.1:8000 on your browser to see the application.
 
 ```bash
-  make docker-run-local
+  make run-server
 ```
 
 ### Creating superuser
@@ -75,6 +75,22 @@ In order to access administrative module, you will need to create a super user. 
   make superuser
 ```
   
+### Creating a docker image
+
+To create a docker image, run the follow command:
+
+```bash
+  make docker-build-image
+```
+
+#### Creating a docker image
+
+To run this image locally, you need to run the command below:
+
+```bash
+  make docker-run-local
+```
+
 ## Authors
 
 - [@BrunoReinoso](https://github.com/BrunoReinoso/)
