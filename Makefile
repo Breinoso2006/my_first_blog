@@ -74,7 +74,7 @@ release-major:  ## Update package release as major
 
 lint: clean  ## Run pylint linter
 	@printf '\n --- \n >>> Running linter...<<<\n'
-	@pylint --rcfile=.pylintrc  --django-settings-module=mysite.settings mysite/*
+	@pylint --rcfile=.pylintrc  --django-settings-module=mysite.settings mysite/* blog/* --errors-only
 	@printf '\n FINISHED! \n --- \n'
 
 style:  ## Run isort and black auto formatting code style in the project
